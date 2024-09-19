@@ -1,40 +1,35 @@
 #include <bits/stdc++.h>
 using namespace std;
-pair<int, int> tree[1000001];
-vector<int> tmp;
+int tmp[10001];
 // 값이 0이면 null과 동일
-void postorder(int curr) {
-    if (curr == 0) return;
-	if (curr >= 1000001) return;
-    postorder(tree[curr].first);
-    postorder(tree[curr].second);
-    cout << curr << "\n"; // 후위
-}
-
-void makeBst(int curr, int n) { // curr: 현재 노드, n: 넣을 값
-	if (n == 0) return;
-	if (curr == 0) return;
-	if (curr >= 1000001) return;
-	if (n > curr) {
-        if (tree[curr].second == 0) tree[curr].second = n;
-        else makeBst(tree[curr].second, n);
-    } else {
-        if (tree[curr].first == 0) tree[curr].first = n;
-        else makeBst(tree[curr].first, n);
-    }
+void postorder(int startIdx, int endIdx) {
+    if (startIdx == endIdx) return;
+	if (startIdx == endIdx - 1) {
+		cout << tmp[startIdx] << "\n";
+		return;
+	}
+	int idx = startIdx + 1;
+	// 값이 큰 게 나올 때 까지 idx++
+	while (idx < endIdx) {
+		if (tmp[startIdx] < tmp[idx]) break;
+		idx++;
+	}
+	
+	// Divide-Conquer
+	// 왼쪽에는 node보다 작은 BST
+	postorder(startIdx+1, idx);
+	// 오른쪽에는 node보다 큰 BST
+	postorder(idx, endIdx);
+	// 후위 순회
+	cout << tmp[startIdx] << "\n";
 }
 
 
 int main() {
-	int N;
+	int N, cnt = 0;
 	while (cin >> N) {
-        tmp.push_back(N);
+        tmp[cnt++] = N;
     }
-	fill(begin(tree), end(tree), make_pair(0, 0));
-
-	int root = tmp[0];
-	for (int i = 1; i < tmp.size(); i++) {
-		makeBst(root, tmp[i]);
-	}
-	postorder(root);
+	
+	postorder(0, cnt);
 }

@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 // 이진 트리 -> 삽입, 삭제: O(1)
 // 그냥 list 쓰면 O(N)임...
